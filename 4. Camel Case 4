@@ -1,0 +1,119 @@
+import java.io.*;
+import java.util.*;
+
+class Solution{
+
+public static void main(String[] args) throws Exception{
+
+  Scanner scanner=new Scanner(System.in);
+
+    while(scanner.hasNextLine()) {
+
+        String input = scanner.nextLine();
+
+        System.out.println(readInputLine(input));
+
+
+    }
+
+}
+
+private static String readInputLine(String str) {
+
+    String splits[] = str.split(";");
+
+    return operationString(splits[0].toUpperCase(), splits[1].toUpperCase(), splits[2]);
+
+}
+
+private static String operationString(String operation,String type,String str) {
+
+    String result = null;
+
+    switch(operation) {
+
+    case "S" :
+         result =splitIntoWords(str);
+        break;
+    case "C":
+        result =combinationString(type,str);
+
+    }
+
+    return result;
+}
+
+private static String combinationString(String type,String str) {
+
+    String result = null;
+
+    switch (type) {
+    case "M":
+        result =compineIntoWords(str)+"()";            
+        break;
+
+    case "V":
+        result =compineIntoWords(str);
+        break;
+    case "C":
+        String classResult =compineIntoWords(str);
+        result = classResult.substring(0,1).toUpperCase()+classResult.substring(1);    
+        break;
+    }
+
+    return result;
+}
+
+private static String compineIntoWords(String str) {
+
+    char chars[]= str.toCharArray();
+
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for(int i=0;i<chars.length;i++) {
+
+        int nextIndex = i+1;
+
+        if(chars[i] == ' ' && nextIndex < chars.length) {
+            chars[nextIndex] = Character.toUpperCase(chars[nextIndex]);
+        }
+
+    }
+
+    for(char c : chars) {
+        if(c != ' ') {
+            stringBuilder.append(c);
+        }
+    }
+
+    return stringBuilder.toString();
+}
+
+private static String splitIntoWords(String str) {
+
+    List<String> splits = new ArrayList<>();
+
+    int startIndex =0;
+    int i=0;
+    for(i=0;i<str.length();i++) {
+        char c = str.charAt(i);
+        if(Character.isUpperCase(c) || c == '(') {
+
+            String subStr = str.substring(startIndex,i);
+
+            if(!subStr.isEmpty()) {
+                splits.add(subStr);
+            }
+
+            startIndex = i;
+        }
+
+    }
+
+    if(i != startIndex && !str.endsWith("()")) {
+        splits.add(str.substring(startIndex,i));
+    }
+
+    return String.join(" ", splits).toLowerCase();
+}
+}
